@@ -1,0 +1,45 @@
+{
+  "author": "florian",
+  "bugs": {},
+  "gx": {
+    "dvcsimport": "github.com/Bit-Nation/chat-node"
+  },
+  "gxDependencies": [
+    {
+      "author": "florian",
+      "hash": "QmVRQBf4hnofDzDZ7oFKSb8GchwVBK2ojuZw1Biwbxvget",
+      "name": "go-libp2p-bootstrap",
+      "version": "1.0.0"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "QmZNkThpqfVXs9GNbexPrfBbXSLNYeKrE7jwFM2oqHbyqN",
+      "name": "go-libp2p-protocol",
+      "version": "1.0.0"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "QmXoz9o2PT3tEzf7hicegwex5UgVP54n3k82K7jrWFyN86",
+      "name": "go-libp2p-net",
+      "version": "2.0.7"
+    },
+    {
+      "hash": "QmSBxn1eLMdViZRDGW9rRHRYwtqq5bqUgipqTMPuTim616",
+      "name": "go-libp2p-kad-dht",
+      "version": "4.0.4"
+    },
+    {
+      "author": "jbenet",
+      "hash": "QmeiCcJfDW1GJnWUArudsv5rQsihpi4oyddPhdqo3CfX6i",
+      "name": "go-datastore",
+      "version": "2.4.1"
+    }
+  ],
+  "gxVersion": "0.12.1",
+  "language": "go",
+  "license": "",
+  "name": "libpp2-dht-test",
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "0.0.0"
+}
+
