@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	dht "gx/ipfs/QmSBxn1eLMdViZRDGW9rRHRYwtqq5bqUgipqTMPuTim616/go-libp2p-kad-dht"
 	bootstrap "gx/ipfs/QmVRQBf4hnofDzDZ7oFKSb8GchwVBK2ojuZw1Biwbxvget/go-libp2p-bootstrap"
 	libp2p "gx/ipfs/QmWsV6kzPaYGBDVyuUfWBvyQygEc9Qrv9vzo8vZ7X4mdLN/go-libp2p"
 	"gx/ipfs/QmeiCcJfDW1GJnWUArudsv5rQsihpi4oyddPhdqo3CfX6i/go-datastore"
+	"gx/ipfs/QmfZTdmunzKzAGJrSvXXQbQ5kLLUiEMX5vdwux7iXkdk7D/go-libp2p-host"
 	"time"
-	"fmt"
 )
 
 var BootstrapPeers = []string{
@@ -19,18 +20,22 @@ var BootstrapPeers = []string{
 	"/ip4/128.199.219.111/tcp/4001/ipfs/QmSoLSafTMBsPKadTEgaXctDQVcqN88CNLHXMkTNwMKPnu",
 }
 
+func config(cfg *libp2p.Config) error {
+	cfg.EnableNAT = true
+	return libp2p.Defaults(cfg)
+}
 
-func main() {
-	
+func peerFactory() (*dht.IpfsDHT, host.Host) {
+
 	//Create host
-	h, err := libp2p.New(context.Background(), libp2p.Defaults)
+	h, err := libp2p.New(context.Background(), config)
 	if err != nil {
 		panic(err)
 	}
-	
+
 	//Create DHT
 	d := dht.NewDHTClient(context.Background(), h, datastore.NewMapDatastore())
-	
+
 	//Bootstrap object
 	err, boot := bootstrap.NewBootstrap(h, bootstrap.Config{
 		BootstrapPeers:    BootstrapPeers,
@@ -41,24 +46,31 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	//Start bootstrap
 	if err := boot.Start(context.Background()); err != nil {
 		panic(err)
 	}
-	
+
 	//Exit on DHT bootstrap error
 	if err := d.Bootstrap(context.Background()); err != nil {
 		panic(err)
 	}
-	
-	fmt.Println(time.Now())
-	pi, err := d.FindPeer(context.Background(), "QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd")
-	fmt.Println(time.Now())
+
+	return d, h
+
+}
+
+func main() {
+
+	_, hostOne := peerFactory()
+	dhtTwo, _ := peerFactory()
+
+	pi, err := dhtTwo.FindPeer(context.Background(), hostOne.ID())
 	if err != nil {
 		panic(err)
 	}
-	
+
 	fmt.Println(pi)
-	
+
 }
